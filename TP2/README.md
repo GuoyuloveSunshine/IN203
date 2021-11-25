@@ -32,11 +32,11 @@ il gagne du temps.
            | Taille image : 800 x 600 | 
 -----------+---------------------------
 séquentiel |
-1          | 
-2          | 
-3          | 
-4          | 
-8          |              
+1          | Le maitre 0 envoye les lignes pour tous les processeur.
+2          | Après il passe à l'état de Recv, quand un processeur finit son tache, il l'envoie à 0 et 0 lui renvoie un autre ligne. 
+3          | Quand tous les lignes sont calculés, 0 envoie -1 aux processeur.
+4          | le processeur reçoit le ligne et le calcule et l'envoie à 0, jusqu'à il reçoit le demande -1
+8          |          
 
 
 
