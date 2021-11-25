@@ -1,6 +1,8 @@
 # TP2 de MA Ziqi
 
-`pandoc -s --toc tp2.md --css=./github-pandoc.css -o tp2.html`
+Compiler: `mpicxx Mandelbrot_my.cpp -o Mandelbrot`
+
+Exécuter: `mpiexec -np 20 ./Mandelbrot`
 
 
 
@@ -16,12 +18,12 @@
 
            | Taille image : 800 x 600 | 
 -----------+---------------------------
-séquentiel |
-1          | On divise `H` par les `nbp` serveurs.
-2          | dans chaque serveurs, il calcule `H/nbp` de ligne
-3          | après, le serveurs 0 collecte les résultats en utilisant `MPI_Gather`
-4          |
-8          |              
+
+1.  On divise `H` par les `nbp` serveurs.
+2.  Dans chaque serveurs, il calcule `H/nbp` de ligne.
+3.  Après, le serveurs 0 collecte les résultats en utilisant `MPI_Gather`.
+
+
 
 *Discuter sur ce qu'on observe, la logique qui s'y cache.*
 
@@ -31,12 +33,11 @@ il gagne du temps.
 
            | Taille image : 800 x 600 | 
 -----------+---------------------------
-séquentiel |
-1          | Le maitre 0 envoye les lignes pour tous les processeur.
-2          | Après il passe à l'état de Recv, quand un processeur finit son tache, il l'envoie à 0 et 0 lui renvoie un autre ligne. 
-3          | Quand tous les lignes sont calculés, 0 envoie -1 aux processeur.
-4          | le processeur reçoit le ligne et le calcule et l'envoie à 0, jusqu'à il reçoit le demande -1
-8          |          
+
+1. Le maitre 0 envoye les lignes pour tous les processeur.
+2.  Après il passe à l'état de Recv, quand un processeur finit son tache, il l'envoie à 0 et 0 lui renvoie un autre ligne. 
+3.  Quand tous les lignes sont calculés, 0 envoie -1 aux processeur.
+4.  Le processeur reçoit le ligne et le calcule et l'envoie à 0, jusqu'à il reçoit le demande -1   
 
 
 
