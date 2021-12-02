@@ -37,13 +37,19 @@ Vulnerability Itlb multihit:     KVM: Mitigation: VMX disabled
 
 *Des infos utiles s'y trouvent : nb core, taille de cache*
 
+L1i cache instruction, Lid cache de donnee, L2 cache de donnee, L3 cache de donnne
+
 
 
 ## Produit scalaire 
 
 *Expliquer les paramètres, les fichiers, l'optimisation de compil, NbSamples, ...*
 
-Samples=1024, N=100023
+on met $NbSamples=1024$,  $N=100023$, 
+
+Nb operations (de produit scalaire) = $2N$ 
+
+Nb acces au memoiry = $2N$  -> memory bound
 
 NUM    | OMP      | Thread 
 -----------|--------------|----------
@@ -59,15 +65,21 @@ séquentiel | 0.798682s |
 
 On ne constate aucune accélération, les performances sont prèsque les mêmes.  parce que il est peut-être memory-bound.. Donc le paralléliser ne l'accélère pas.
 
-
 ## Produit matrice-matrice
+
+Nb operation = $2N^3$, Nb acces au memory = $3N^2$ -> CPU bound.
+
+sizeof(double) =  64 bit = 8 octets, size(A) = $8\times1024^2= 8MB$, taille A, B et C est 24 MB.
+
+les matrix ne rentrent pas dans cache.
+
 N    | Temps(s) 
 -----------|--------------
 1023 | 22.7716 
 1024          | 44.805 
 1025          | 23.2527 
 
-Ce programme est CPU bound.
+il y a un decalage sur N = 1024.
 
 ### Permutation des boucles
 
@@ -86,8 +98,6 @@ j,k,i             | 22.5137 | 95.3858 |95.487
 k,j,i             | 22.536 | 95.2914 |95.3726
 
 *Discussion des résultats*
-
-
 
 On a vu que les deux meilleurs permutations sont celles qui mettent i dans à l'arrière, d'après le cours, cette permutation exploite au mieux la mémoire cache. Les MFlops sont une mesure courante de la vitesse des microprocesseurs utilisés pour effectuer des calculs à virgule flottante. On remarque que les performance baissent quand la taille des matrices augmente.
 
@@ -126,6 +136,10 @@ origine (=max)    | 2317.28 |2223.02|2261.26
 1024              | 2317.28 |2277.49|--
 
 D'après tous les mesures, on peut trouver que la meilleure performance du séquentiel est 2700+-, quand la taille de bloc est 256.
+
+une taille de blocs de 256 semble le meilleur $256\times256\times8\times3 = 1.5MB$
+
+$\sqrt{3\times1024\times1024/(3\times8)} = 362$ (szBlock)
 
 
 ### Bloc + OMP

@@ -6,11 +6,20 @@ Exécuter: `mpiexec -np 20 ./Mandelbrot`
 
 
 
-## Questions du cours
+## Questions du cours 1
 
 1.  Il y a un interblocage quand 1 exécute avant 0, après 2 reçoit les données vient de 1 et 2 passe à l'état `MPI_Ssend` où 0 est aussi dans l'état `MPI_Ssend`.
 2. Il n'y a pas d'interblocage quand 0 exécute avant 1,  après 0 envoie les donnés dans à 2, il passe à `MPI_Recv` et 2 reçoit les donnés de 0, il passe à `MPI_Ssend` et il envoie les donnée à 0, après il passe à l'état `MPI_Recv`......
 3. Pour éviter l'interblocage, il faut indiquer où vient les donnés.
+
+## Question du cours 2
+
+1) Lois d'Amdhal $S(n) = \frac{n}{1+(n-1)f}\longrightarrow\frac{1}{f}$, avec $f =0.1$$,   S(n) = 10$. 
+1) Or $S(n) = 4$ expérimentalement, $f = \frac{1}{4} = 0.25$ , il y a 25% code séquentiel. f  est la partie du code séquentiel.
+
+3. Lois de Gustafon, $S(n) = \frac{s+np}{s+p}  $ avec $ s = 0.25,  p =0.75$, Alors $S(2n) = \frac{s+2np}{s+p} =  2S(n)-s$ 
+
+​		or $S(n) = 4, S(2n) = 2\times4-0.25 = 7.75$
 
 ## Mandelbrot 
 
