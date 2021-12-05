@@ -126,7 +126,7 @@ computeMandelbrotSet( int W, int H, int maxIter ){
         from_who = status.MPI_SOURCE;
         jrow     = status.MPI_TAG;
         MPI_Send(&irow, 1, MPI_INT, from_who, 101, MPI_COMM_WORLD);
-        //std::copy(row.data(), row.data()+W, pixels.data() + W*(H-jrow-1));
+        std::copy(row.data(), row.data()+W, pixels.data() + W*(H-jrow-1));
       }
     }
     else{ // Les esclaves

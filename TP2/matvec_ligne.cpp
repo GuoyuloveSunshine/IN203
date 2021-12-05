@@ -65,7 +65,7 @@ std::vector<double>
 Matrix::operator * ( const std::vector<double>& u ) const
 {
     const Matrix& A = *this;
-    int istart = m_ncols * m_rank;
+    // int istart = m_ncols * m_rank;
     std::vector<double> v(m_nrows * m_nbp);
     std::vector<double> v_loc(m_nrows, 0.);
     for ( int i = 0; i < m_nrows; ++i ) {
@@ -81,8 +81,8 @@ Matrix::operator * ( const std::vector<double>& u ) const
 Matrix::Matrix (int dim, int rank, int nbp ) : m_nrows(dim), m_ncols(dim), m_rank(rank), m_nbp(nbp),
                            m_arr_coefs(dim*dim)
 {
-    int i_commence = rank *dim/nbp;
-    for ( int i = 0; i < dim/nbp; ++ i ) {
+    int i_commence = rank + dim/nbp;
+    for ( int i = 0; i < dim; ++ i ) {
         for ( int j = 0; j < dim; ++j ) {
             (*this)(i,j) = (i+i_commence+j)%dim;
         }

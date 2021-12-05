@@ -83,7 +83,7 @@ std::vector<int> computeMandelbrotSet( int W, int H, int maxIter, int it_begin, 
     std::vector<int> pixels(W * H_morc);
     // On parcourt les pixels de l'espace image :
     for (int i = it_begin; i < it_end; i++ ){
-        std::cout<<"it_begin: " << it_begin << std::endl;
+        // std::cout<<"it_begin: " << it_begin << std::endl;
         computeMandelbrotSetRow(W, H, maxIter, i, pixels.data() + W*(H_morc-i-1+it_begin));
     }
     return pixels;

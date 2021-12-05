@@ -78,7 +78,7 @@ Matrix::operator * ( const std::vector<double>& u ) const{
 // =====================================================================
 Matrix::Matrix (int dim, int rank, int nbp): m_nrows(dim), m_ncols(dim/nbp), m_rank(rank), m_nbp(nbp),
                            m_arr_coefs(dim*dim/nbp){
-    int j_commence = rank * dim/nbp;
+    int j_commence = rank + dim/nbp;
     for ( int i = 0; i < dim; ++ i ) { // i ligne
         for ( int j = 0; j < dim/nbp; ++j ) { // j colonne
             (*this)(i,j) = (i+j+j_commence)%dim;
