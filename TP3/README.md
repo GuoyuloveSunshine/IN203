@@ -169,7 +169,7 @@ Le temps pour calculer:
 |                     | sur les entiers | sur les vecteurs |
 | ------------------- | --------------- | ---------------- |
 | **sans thread**     | 0.82            | 30.10            |
-| **avec thread** = 8 | 0.81            | 28.49            |
+| **avec thread** = 2 | 0.38            | 19.60            |
 
 Il y a une petite accélération  pour les tris sur les entiers et les vecteurs, par contre, il y a une grande difference entre les tris sur les entiers et les vecteurs, car la dimention de vecteur est plus grande que la dimention d'entier, il prend plus de temps pour calculer.
 
@@ -177,19 +177,25 @@ Il y a une petite accélération  pour les tris sur les entiers et les vecteurs,
 
 ## Ensemble de Bhudda
 
-On utilise OpenMP pour paralléliser le code Bhudda et on mesure l'accélération obtenue en fonction du nombre de threads, les résultats sont dans le tableau, malheureusement, il n'y a pas d'accélération, plus de threads qu'on utilise, plus longue est le temps pour calculer.
+```
+$ make bhudda_omp.exe bhudda.exe
+
+$ for i in $(seq 1 4); do elap=$(OMP_NUM_THREADS=$i ./bhudda_omp.exe|grep "Temps calcul"); echo -e "$i\t$elap"; done > bhudda_omp.out
+```
+
+On utilise OpenMP pour paralléliser le code Bhudda et on mesure l'accélération obtenue en fonction du nombre de threads, les résultats sont dans le tableau, comme ce programme utilise un gérénateur aléatoire, les versions séquentielles et multithread donnent des résultats très légèrement différents
 
 | OMP_NUM    | Bhudda 1(s) | Bhudda 2(s) | Bhudda 3(s) |
 | ---------- | ----------- | ----------- | ----------- |
-| sequentiel | 5.09911     | 5.35602     | 0.330138    |
-| 1          | 7.31        | 5.83        | 0.39        |
-| 2          | 5.87        | 5.24        | 0.32        |
-| 3          | 6.67        | 5.60        | 0.35        |
-| 4          | 7.14        | 5.82        | 0.39        |
-| 5          | 8.88        | 7.49        | 0.47        |
-| 6          | 10.91       | 9.02        | 0.56        |
-| 7          | 14.15       | 11.53       | 0.72        |
-| 8          | 14.75       | 11.86       | 0.71        |
+| sequentiel | 5.489       | 5.333       | 0.332       |
+| 1          | 4.108       | 3.719       | 0.234       |
+| 2          | 2.563       | 1.919       | 0.122       |
+| 3          | 1.932       | 1.596       | 0.095       |
+| 4          | 1.862       | 1.137       | 0.075       |
+| 5          | 1.780       | 1.099       | 0.074       |
+| 6          | 1.656       | 1.131       | 0.081       |
+| 7          | 1.689       | 1.156       | 0.074       |
+| 8          | 1.832       | 1.162       | 0.111       |
 
 # Tips 
 

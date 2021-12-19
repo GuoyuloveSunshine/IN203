@@ -9,23 +9,29 @@
 # include <algorithm>
 # include <chrono>
 # include <fstream>
-# include <omp.h>
 
-#define OMP_NUM_THREADS 1
-struct Complex{
+struct Complex
+{
     float re, im;    
-    Complex() : re(0.), im(0.){}
-    Complex(double r, double i) : re(r), im(i){}
+    Complex() : re(0.), im(0.)
+    {}
+    Complex(double r, double i) : re(r), im(i)
+    {}
     double sqNorm() { return re*re + im*im; }
-    Complex operator + ( const Complex& z ){
+    Complex operator + ( const Complex& z )
+    {
         return Complex(re + z.re, im + z.im );
     }
-    Complex operator * ( const Complex& z ){
+    Complex operator * ( const Complex& z )
+    {
         return Complex(re*z.re-im*z.im, re*z.im+im*z.re);
     }
+
+
 };
 
-bool test_mandelbrot_divergent( int maxIter, const Complex& c){
+bool test_mandelbrot_divergent( int maxIter, const Complex& c)
+{
     Complex z{0.,0.};
     // On vérifie dans un premier temps si le complexe
     // n'appartient pas à une zone de convergence connue :
@@ -41,7 +47,8 @@ bool test_mandelbrot_divergent( int maxIter, const Complex& c){
         if (ctnrm2 < 0.5f*(1.f-ct.re/ctnrm2)) return false;
     }
     int niter = 0;
-    while ((z.sqNorm() < 4.) && (niter < maxIter)){
+    while ((z.sqNorm() < 4.) && (niter < maxIter))
+    {
         z = z*z + c;
         ++niter;
     }
@@ -49,28 +56,31 @@ bool test_mandelbrot_divergent( int maxIter, const Complex& c){
 }
 
 void comp_mandelbrot_orbit( int maxIter, const Complex& c, unsigned width, unsigned height, 
-                            std::vector<unsigned>& image ){
-    int i = 0;
-    Complex z{0.,0.};
-    Complex z2{0.,0.};
-    while ( (z2.re+z2.im < float(4)) && (i<maxIter) ){
+                            std::vector<unsigned>& image )
+{
+     int i = 0;
+     Complex z{0.,0.};
+     Complex z2{0.,0.};
+     while ( (z2.re+z2.im < float(4)) && (i<maxIter) )
+     {
         z.im = float(2)*z.re*z.im + c.im;
         z.re = z2.re - z2.im + c.re;
         z2.re = z.re*z.re;
         z2.im = z.im*z.im;
         unsigned ip = unsigned((float(2)+z.im)*width/float(4));
         unsigned jp = unsigned((float(2)+z.re)*height/float(4));
-        if ( (ip<width) && (jp<height) ){
+        if ( (ip<width) && (jp<height) ) {
            int ind = ip+jp*width;
            image[ind] += 1;
         }
         i ++;
-    }
+     }
 }
 // Bhuddabrot to test the chronometer
 // ---------------------------------------------------------------------
 std::vector<unsigned>
-bhuddabrot ( unsigned long nbSamples, unsigned long maxIter, unsigned width, unsigned height ){
+bhuddabrot ( unsigned long nbSamples, unsigned long maxIter, unsigned width, unsigned height )
+{
     std::cerr << "Entring in Bhudda brot\n";
     std::random_device rd;
     std::mt19937 generator1(rd());
@@ -78,13 +88,12 @@ bhuddabrot ( unsigned long nbSamples, unsigned long maxIter, unsigned width, uns
     
     std::uniform_real_distribution<float> normDistrib(0.,2.);
     auto genNorm = std::bind( normDistrib, generator1 );
-    std::uniform_real_distribution<float> angleDistrib(0.,6.283185307179586);
+    std::uniform_real_distribution<float> angleDistrib(0.,
+                                                     6.283185307179586);
     auto genAngle = std::bind( angleDistrib, generator2 );
 
     std::cerr << "Computing starting c\n";
     std::vector<unsigned> image(width*height, 0U);
-    #pragma omp parallel num_threads(OMP_NUM_THREADS)
-    #pragma omp parallel
     for ( unsigned long iSample = 0; iSample < nbSamples; ) {
         float r = genNorm();
         float angle = genAngle();
@@ -104,7 +113,6 @@ void save_image( const std::string &filename, unsigned width, unsigned height, c
     std::ofstream ofs( filename.c_str(), std::ios::out | std::ios::binary );
     ofs << "P6\n"
         << width << " " << height << "\n255\n";
-    #pragma omp parallel for ordered schedule(dynamic)
     for ( unsigned i = 0; i < width * height; ++i ) {
         ofs << img[ 4 * i + 0 ] << img[ 4 * i + 1 ] << img[ 4 * i + 2 ];
     }
@@ -112,7 +120,8 @@ void save_image( const std::string &filename, unsigned width, unsigned height, c
 }
 
 
-int main(){
+int main()
+{
     unsigned width = 768U, height = 1024U;
     std::cerr << "Starting program\n";
     std::chrono::time_point<std::chrono::system_clock> start, end;
@@ -168,7 +177,7 @@ int main(){
             image[ 4*ind+3 ] = 255;
         }
     }    
-    save_image("bhuddabrot.ppm", width, height, image);
+    save_image("bhudda.ppm", width, height, image);
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
     std::cout << "Temps Sauvegarde image : " << elapsed_seconds.count() 

@@ -1,6 +1,4 @@
 include Make_linux.inc
-#include Make_msys2.inc
-#include Make_osx.inc
 
 CXXFLAGS = -std=c++14
 ifdef DEBUG
@@ -11,14 +9,14 @@ CXXFLAGS2 = ${CXXFLAGS} -O2 -march=native -Wall
 CXXFLAGS += -O3 -march=native -Wall
 endif
 
-ALL= dotproduct.exe dotproduct_thread.exe TestProductMatrix.exe TestProductMatrix_Bloc.exe bitonic.exe bitonic_thread.exe bhudda.exe
+ALL= dotproduct.exe dotproduct_thread.exe TestProductMatrix.exe TestProductMatrix_Bloc.exe bitonic.exe bitonic_thread.exe bitonic_thread_corrige.exe bhudda.exe bhudda_omp.exe
 
 default:	help
 
 all: $(ALL)
 
 clean:
-	@rm -fr *.o *.exe *~ *.tga
+	@rm -fr *.o *.exe *~ *.tga *.gp *.ppm *.out
 
 %.exe: %.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIB)
@@ -31,12 +29,16 @@ TestProductMatrix.exe : TestProductMatrix.cpp Matrix.hpp Matrix.cpp ProdMatMat.c
 	$(CXX) $(CXXFLAGS2) $^ -o $@ $(LIB)	
 TestProductMatrix_Bloc.exe : TestProductMatrix_Bloc.cpp Matrix.hpp Matrix.cpp ProdMatMat_Bloc.cpp
 	$(CXX) $(CXXFLAGS2) $^ -o $@ $(LIB)	
-
 bitonic.exe : bitonic.cpp Vecteur.hpp Vecteur.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIB)	
-bitonic_thread.exe : bitonic.cpp Vecteur.hpp Vecteur.cpp
+bitonic_thread.exe : bitonic_thread.cpp Vecteur.hpp Vecteur.cpp
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIB)	
+bitonic_thread_corrige.exe : bitonic_thread_corrige.cpp Vecteur.hpp Vecteur.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LIB)	
 
+
+bhudda_omp.exe:bhudda_omp.cpp
+	$(CXX) $(CXXFLAGS2) $^ -o $@ $(LIB)	
 
 help:
 	@echo "Available targets : "

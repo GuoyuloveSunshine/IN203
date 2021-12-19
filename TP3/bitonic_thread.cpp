@@ -12,6 +12,7 @@
 # include "Vecteur.hpp"
 using namespace Algebra;
 int tem_val = 0;
+int thread_size = 8;
 
 // Tri Parallèle Bitonic
 namespace Bitonic{
@@ -57,7 +58,7 @@ int main(){
     std::chrono::time_point<std::chrono::system_clock> start, end;
     const size_t N = (1UL << 21);
     const size_t dim = 40;
-    int thread_size = 8;
+
     std::random_device rd;
     std::mt19937 generator1(rd());
     std::mt19937 generator2(rd());

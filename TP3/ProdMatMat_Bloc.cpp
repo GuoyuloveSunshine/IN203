@@ -20,8 +20,7 @@ namespace
     const int szBlock = 256;
 }  // namespace
 
-Matrix operator*( const Matrix &A, const Matrix &B )
-{
+Matrix operator*( const Matrix &A, const Matrix &B ){
     Matrix C( A.nbRows, B.nbCols, 0.0 );
 #   pragma omp parallel for    
     for ( int jBlk = 0; jBlk < B.nbCols; jBlk += szBlock)

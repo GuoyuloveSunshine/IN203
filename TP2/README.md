@@ -70,4 +70,4 @@ Quand on divise le matrice par ligne, on initialise le matrice par `dim/nbp` de 
 $$
 A_{rank}(i,j) = (i+j+rank + dim/nbp)\%dim
 $$
-après on calcule chaque $A_{rank} *U$, on les récupère par `MPI_Allgather`.
+après on calcule chaque $A_{rank} *U$, on les récupère par `MPI_Allgather`.z
