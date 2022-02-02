@@ -59,7 +59,7 @@ long int recevoir_bloquant(int rank, int nbp, MPI_Comm globComm){
 		std::cout << "je suis ["<<rank<<"], et j'envoie mon résultat " << nb_darts_temp << " a [0]"<< std::endl;
 		MPI_Send(&nb_darts_temp,1,MPI_UNSIGNED_LONG,0,666,globComm);
 	}
-}
+};
 
 long int recevoir_non_bloquant(int rank, int nbp, MPI_Comm globComm){
 	MPI_Request REQS;
@@ -95,7 +95,7 @@ long int recevoir_non_bloquant(int rank, int nbp, MPI_Comm globComm){
 		MPI_Send(&nb_darts_temp,1,MPI_UNSIGNED_LONG,0,666,globComm);
 	}
 	
-}
+};
 
 int main( int nargs, char* argv[] ){
 	MPI_Init( &nargs, &argv );

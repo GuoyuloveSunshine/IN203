@@ -13,11 +13,9 @@
 using namespace Algebra;
 
 // Tri Parallèle Bitonic
-namespace Bitonic
-{
+namespace Bitonic{
     template <typename Obj>
-    void _compare( bool up, Obj *objs, int len )
-    {
+    void _compare( bool up, Obj *objs, int len ){
         int dist = len / 2;
         for ( int i = 0; i < dist; ++i ) {
             if ( ( objs[ i ] > objs[ i + dist ] ) == up ) {
@@ -28,8 +26,7 @@ namespace Bitonic
     // --------------------------------------------
     template <typename Obj>
     std::pair<Obj *, int>
-    _merge( bool up, Obj *objs, int len )
-    {
+    _merge( bool up, Obj *objs, int len ){
         if ( len == 1 ) return std::make_pair( objs, len );
         _compare( up, objs, len );
         auto first = _merge( up, objs, len / 2 );
@@ -39,11 +36,10 @@ namespace Bitonic
     // --------------------------------------------
     template <typename Obj>
     std::pair<Obj *, int>
-    _sort( bool up, Obj *objs, int len, int depth = 0 )
-    {
+    _sort( bool up, Obj *objs, int len, int depth = 0 ){
         if ( len <= 1 ) return std::make_pair( objs, 1 );
         std::pair<Obj *, int> first, second;
-        if ( depth < 4 ) {
+        if ( depth < 4 ){
             std::thread t1( [depth]( Obj *objs, int len, std::pair<Obj *, int> &p ) {
                 p = _sort( true, objs, len / 2, depth + 1 );
             },
@@ -54,7 +50,8 @@ namespace Bitonic
                             objs, len, std::ref( second ) );
             t1.join();
             t2.join();
-        } else {
+        } 
+        else{
             first = _sort( true, objs, len / 2, depth+1 );
             second = _sort( false, objs + len / 2, len - ( len / 2 ), depth+1 );
         }
@@ -64,15 +61,13 @@ namespace Bitonic
     // --------------------------------------------
     template <typename Obj>
     std::vector<Obj> &
-    sort( bool up, std::vector<Obj> &x )
-    {
-        _sort( up, x.data(), int( x.size() ) );
+    sort( bool up, std::vector<Obj> &x ){
+        _sort( up, x.data(), int( x.size()));
         return x;
     }
 }  // namespace Bitonic
 
-int main()
-{
+int main(){
     std::chrono::time_point<std::chrono::system_clock> start, end;
     const size_t N = ( 1UL << 21 );
     const size_t dim = 40;
@@ -94,15 +89,15 @@ int main()
     std::chrono::duration<double> elapsed_seconds = end - start;
     std::cout << "Temps calcul tri sur les entiers : " << elapsed_seconds.count()
               << std::endl;
-    for ( size_t i = 1; i < tab.size(); ++i ) {
-        if ( tab[ i ] < tab[ i - 1 ] ) {
+    for ( size_t i = 1; i < tab.size(); ++i ){
+        if ( tab[ i ] < tab[ i - 1 ] ){
             throw std::logic_error( "Erreur de tri pour les entiers !" );
         }
     }
 
     // Trie sur les vecteurs :
     std::vector<Vecteur> vtab( N );
-    for ( auto &x : vtab ) {
+    for ( auto &x : vtab ){
         x = Vecteur( dim );
         x[ 0 ] = genDouble();
         x[ 1 ] = genDouble();
@@ -115,8 +110,8 @@ int main()
     elapsed_seconds = end - start;
     std::cout << "Temps calcul tri sur les vecteurs : " << elapsed_seconds.count()
               << std::endl;
-    for ( size_t i = 1; i < vtab.size(); ++i ) {
-        if ( vtab[ i ] < vtab[ i - 1 ] ) {
+    for ( size_t i = 1; i < vtab.size(); ++i ){
+        if ( vtab[ i ] < vtab[ i - 1 ] ){
             throw std::logic_error( "Erreur de tri pour les vecteurs !" );
         }
     }

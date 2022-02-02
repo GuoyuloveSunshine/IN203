@@ -1,4 +1,2 @@
-# Ziqi MA-IN203
-
-#mpiCC -o filename filename.cpp
-#mpiexec -np number ./filename
+# Promotion_2023
+TP et Projet pour la promotion 2023
